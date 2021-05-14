@@ -25,7 +25,9 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "migrate": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run",
+    "migrate:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:revert"
   },
   "private": true,
   "dependencies": {
