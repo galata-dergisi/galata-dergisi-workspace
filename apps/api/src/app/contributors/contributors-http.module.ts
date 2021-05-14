@@ -16,28 +16,13 @@
 // along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
 
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConnectionOptions } from 'typeorm';
-
-import { Contributor } from './contributors/contributor.entity';
-import { ContributorsHttpModule } from './contributors/contributors-http.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ContributorsModule } from './contributors.module';
+import { ContributorsService } from './contributors.service';
+import { ContributorsController } from './contributors.controller';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: async () => {
-        const connectionOptions = await getConnectionOptions();
-        return {
-          ...connectionOptions,
-          entities: [Contributor],
-        };
-      },
-    }),
-    ContributorsHttpModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ContributorsModule],
+  providers: [ContributorsService],
+  controllers: [ContributorsController]
 })
-export class AppModule {}
+export class ContributorsHttpModule {}

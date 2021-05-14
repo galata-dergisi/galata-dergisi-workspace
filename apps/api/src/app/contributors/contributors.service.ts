@@ -15,29 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
 
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConnectionOptions } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Contributor } from './contributor.entity';
 
-import { Contributor } from './contributors/contributor.entity';
-import { ContributorsHttpModule } from './contributors/contributors-http.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+@Injectable()
+export class ContributorsService {
+  constructor(
+    @InjectRepository(Contributor)
+    private contributorsRepository: Repository<Contributor>,
+  ) {}
 
-@Module({
-  imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: async () => {
-        const connectionOptions = await getConnectionOptions();
-        return {
-          ...connectionOptions,
-          entities: [Contributor],
-        };
-      },
-    }),
-    ContributorsHttpModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
+  findAll(): Promise<Contributor[]> {
+    return this.contributorsRepository.find();
+  }
+
+  findOne(id: number): Promise<Contributor> {
+    return this.contributorsRepository.findOne(id);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.contributorsRepository.delete(id);
+  }
+}

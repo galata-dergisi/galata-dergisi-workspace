@@ -15,29 +15,22 @@
 // You should have received a copy of the GNU General Public License
 // along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
 
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConnectionOptions } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Contributor } from './contributors/contributor.entity';
-import { ContributorsHttpModule } from './contributors/contributors-http.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+@Entity()
+export class Contributor {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-@Module({
-  imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: async () => {
-        const connectionOptions = await getConnectionOptions();
-        return {
-          ...connectionOptions,
-          entities: [Contributor],
-        };
-      },
-    }),
-    ContributorsHttpModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
+  @Column()
+  nickName: string;
+
+  @Column({ default: null })
+  email: string|null;
+
+  @Column({ default: new Date() })
+  createdAt: Date;
+
+  @Column({ default: null })
+  updatedAt: Date|null;
+}
