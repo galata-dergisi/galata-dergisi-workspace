@@ -17,16 +17,37 @@
  * along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Put, Delete, Param, ParseIntPipe } from '@nestjs/common';
+import { ContributorDTO } from '@galata-dergisi/api-interfaces';
 import { Contributor } from './contributor.entity';
 import { ContributorsService } from './contributors.service';
+import { DTOValidationPipe } from '../lib/dto-validation.pipe';
 
 @Controller()
 export class ContributorsController {
   constructor(private readonly contributorsService: ContributorsService) {}
 
   @Get('contributors')
-  getData(): Promise<Contributor[]> {
-    return this.contributorsService.findAll();
+  getContributors(): Promise<Contributor[]> {
+    return this.contributorsService.getAllContributors();
+  }
+
+  @Post('contributors')
+  @HttpCode(201)
+  async postContributors(@Body(new DTOValidationPipe()) contributorDTO: ContributorDTO): Promise<Contributor> {
+    return this.contributorsService.createContributor(contributorDTO);
+  }
+
+  @Put('contributors/:id')
+  async putContributor(
+    @Param('id', ParseIntPipe) contributorId: number,
+    @Body(new DTOValidationPipe()) contributorDTO: ContributorDTO
+  ): Promise<Contributor> {
+    return this.contributorsService.updateContributorById(contributorId, contributorDTO);
+  }
+
+  @Delete('contributors/:id')
+  deleteContributor(@Param('id', ParseIntPipe) id: number): Promise<boolean> {
+    return this.contributorsService.removeContributorById(id);
   }
 }
