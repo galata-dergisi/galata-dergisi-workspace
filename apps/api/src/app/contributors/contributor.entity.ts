@@ -35,4 +35,14 @@ export class Contributor {
 
   @Column({ default: null })
   updatedAt: Date|null;
+
+  constructor(nickName?: string, email?: string|null) {
+    if (nickName) {
+      this.nickName = nickName;
+    }
+
+    if (email !== undefined) {
+      this.email = email;
+    }
+  }
 }
