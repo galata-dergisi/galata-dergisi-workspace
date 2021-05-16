@@ -19,6 +19,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ContributorDTO } from '@galata-dergisi/api-interfaces';
 import { Repository } from 'typeorm';
 import { Contributor } from './contributor.entity';
 
@@ -26,18 +27,35 @@ import { Contributor } from './contributor.entity';
 export class ContributorsService {
   constructor(
     @InjectRepository(Contributor)
-    private contributorsRepository: Repository<Contributor>,
+    private contributorsRepository: Repository<Contributor>
   ) {}
 
-  findAll(): Promise<Contributor[]> {
+  getAllContributors(): Promise<Contributor[]> {
     return this.contributorsRepository.find();
   }
 
-  findOne(id: number): Promise<Contributor> {
+  getContributorById(id: number): Promise<Contributor> {
     return this.contributorsRepository.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.contributorsRepository.delete(id);
+  async removeContributorById(id: number): Promise<boolean> {
+    const result = await this.contributorsRepository.delete(id);
+    return result.affected === 1;
+  }
+
+  createContributor(contributorDTO: ContributorDTO): Promise<Contributor> {
+    const contributor = new Contributor(contributorDTO.nickName, contributorDTO.email);
+    return this.contributorsRepository.save(contributor);
+  }
+
+  async updateContributorById(contributorId: number, contributorDTO: ContributorDTO): Promise<Contributor> {
+    const contributor = await this.contributorsRepository.findOne(contributorId);
+    if (!contributor) {
+      return null;
+    }
+
+    contributor.nickName = contributorDTO.nickName;
+    contributor.email = contributorDTO.email;
+    return this.contributorsRepository.save(contributor);
   }
 }
