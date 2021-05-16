@@ -18,8 +18,8 @@
  */
 
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConnectionOptions } from 'typeorm';
 
 import { Contributor } from './contributors/contributor.entity';
 import { ContributorsHttpModule } from './contributors/contributors-http.module';
@@ -28,11 +28,20 @@ import { AppService } from './app.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
-      useFactory: async () => {
-        const connectionOptions = await getConnectionOptions();
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
         return {
-          ...connectionOptions,
+          type: 'mysql',
+          host: configService.get('DATABASE_HOST', 'localhost'),
+          port: configService.get('DATABASE_PORT', 3306),
+          database: configService.get('DATABASE_NAME', 'galata_dergisi'),
+          username: configService.get('DATABASE_USERNAME'),
+          password: configService.get('DATABASE_PASSWORD'),
+          logging: false,
           entities: [Contributor],
         };
       },
