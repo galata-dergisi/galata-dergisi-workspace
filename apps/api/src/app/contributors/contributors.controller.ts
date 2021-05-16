@@ -15,29 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
 
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConnectionOptions } from 'typeorm';
+import { Controller, Get } from '@nestjs/common';
+import { Contributor } from './contributor.entity';
+import { ContributorsService } from './contributors.service';
 
-import { Contributor } from './contributors/contributor.entity';
-import { ContributorsHttpModule } from './contributors/contributors-http.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+@Controller()
+export class ContributorsController {
+  constructor(private readonly contributorsService: ContributorsService) {}
 
-@Module({
-  imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: async () => {
-        const connectionOptions = await getConnectionOptions();
-        return {
-          ...connectionOptions,
-          entities: [Contributor],
-        };
-      },
-    }),
-    ContributorsHttpModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
+  @Get('contributors')
+  getData(): Promise<Contributor[]> {
+    return this.contributorsService.findAll();
+  }
+}

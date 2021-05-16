@@ -1,15 +1,27 @@
 {
   "name": "galata-dergisi-workspace",
   "version": "0.0.0",
+  "homepage": "https://github.com/galata-dergisi/galata-dergisi-workspace#readme",
+  "bugs": {
+    "url": "https://github.com/galata-dergisi/galata-dergisi-workspace/issues"
+  },
   "license": "GPL-3.0-or-later",
+  "contributors": [
+    "Zeynep Kazu <zeynepkazu@gmail.com>",
+    "Mehmet Baker <mehmet@mehmetbaker.dev>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galata-dergisi/galata-dergisi-workspace.git"
+  },
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "nx": "nx",
     "start": "ng serve",
     "build": "ng build",
-    "test": "nx test api && nx test editor-panel",
-    "lint": "nx workspace-lint && ng lint",
+    "test": "nx run-many --all --target=test",
+    "lint": "nx run-many --all --target=lint",
     "e2e": "ng e2e",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
@@ -25,7 +37,9 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "migrate": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run",
+    "migrate:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:revert"
   },
   "private": true,
   "dependencies": {
@@ -40,10 +54,13 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/typeorm": "^7.1.5",
     "@nrwl/angular": "12.2.0",
+    "mysql2": "^2.2.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.6.3",
     "tslib": "^2.0.0",
+    "typeorm": "^0.2.32",
     "zone.js": "^0.10.2"
   },
   "devDependencies": {

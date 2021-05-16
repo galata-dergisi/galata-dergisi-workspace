@@ -1,15 +1,17 @@
-name: "Unit Tests"
+name: "Lint & Test"
 
 on:
   push:
-    branches: [ main ]
+    paths:
+      - '**.ts'
+      - .github/workflows/lint-and-test.yml
   pull_request:
     branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  run_unit_tests:
-    name: Run unit tests
+  lint_and_test:
+    name: Run lint and tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -32,6 +34,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Run lint
+        run: npm run lint
 
       - name: Run tests
         run: npm run test
