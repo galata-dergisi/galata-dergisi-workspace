@@ -17,6 +17,24 @@
  * along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface Message {
-  message: string;
+import { IsString, IsEmail, Length, IsOptional } from 'class-validator';
+
+export class ContributorDTO {
+  @IsString({ message: 'nickName must be a string.' })
+  @Length(1, 255, { message: `nickName's length must be between 1 and 255 characters.`})
+  nickName: string;
+
+  @IsOptional()
+  @IsEmail({}, { message: 'Email is not a valid email.' })
+  email?: string|null;
+
+  constructor(nickName?: string, email?: string|null) {
+    if (nickName) {
+      this.nickName = nickName;
+    }
+
+    if (email) {
+      this.email = email;
+    }
+  }
 };

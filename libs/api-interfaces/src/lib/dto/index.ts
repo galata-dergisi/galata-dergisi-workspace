@@ -17,6 +17,4 @@
  * along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface Message {
-  message: string;
-};
+export * from './contributor.dto';

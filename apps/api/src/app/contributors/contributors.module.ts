@@ -17,6 +17,12 @@
  * along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface Message {
-  message: string;
-};
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Contributor } from './contributor.entity';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Contributor])],
+  exports: [TypeOrmModule]
+})
+export class ContributorsModule {}

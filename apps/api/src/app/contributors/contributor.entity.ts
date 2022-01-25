@@ -17,6 +17,32 @@
  * along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface Message {
-  message: string;
-};
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class Contributor {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  nickName: string;
+
+  @Column({ default: null })
+  email: string|null;
+
+  @Column({ default: new Date() })
+  createdAt: Date;
+
+  @Column({ default: null })
+  updatedAt: Date|null;
+
+  constructor(nickName?: string, email?: string|null) {
+    if (nickName) {
+      this.nickName = nickName;
+    }
+
+    if (email !== undefined) {
+      this.email = email;
+    }
+  }
+}

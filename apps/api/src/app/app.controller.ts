@@ -1,7 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-
 import { Message } from '@galata-dergisi/api-interfaces';
-
 import { AppService } from './app.service';
 
 @Controller()

@@ -17,6 +17,16 @@
  * along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface Message {
-  message: string;
-};
+import { DTOValidationPipe } from './dto-validation.pipe';
+
+describe('Test DTOValidationPipe', () => {
+  let pipe: DTOValidationPipe;
+
+  beforeEach(() => {
+    pipe = new DTOValidationPipe();
+  });
+
+  it('should be defined', () => {
+    expect(pipe).toBeDefined();
+  });
+});

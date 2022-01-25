@@ -17,6 +17,14 @@
  * along with galata-dergisi-workspace. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface Message {
-  message: string;
-};
+import { Module } from '@nestjs/common';
+import { ContributorsModule } from './contributors.module';
+import { ContributorsService } from './contributors.service';
+import { ContributorsController } from './contributors.controller';
+
+@Module({
+  imports: [ContributorsModule],
+  providers: [ContributorsService],
+  controllers: [ContributorsController]
+})
+export class ContributorsHttpModule {}
